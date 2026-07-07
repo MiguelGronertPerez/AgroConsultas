@@ -477,27 +477,42 @@
             const defaultLon = -76.37;
 
             if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        // Éxito: El usuario dio permiso
-                        const userLat = position.coords.latitude;
-                        const userLon = position.coords.longitude;
-                        
-                        fetchCityName(userLat, userLon);
-                        fetchWeather(userLat, userLon);
-                        
-                        // Actualizar cada 15 mins con las coordenadas del usuario
-                        setInterval(() => fetchWeather(userLat, userLon), 900000);
-                    },
-                    (error) => {
-                        // Error o denegado: Usar por defecto
-                        console.warn("Geolocalización denegada o fallida, usando Tarapoto por defecto.", error);
-                        document.getElementById('clima-ubicacion').innerHTML = `<i class="fa-solid fa-location-dot"></i> Tarapoto, San Martín (Por defecto)`;
-                        fetchWeather(defaultLat, defaultLon);
-                        setInterval(() => fetchWeather(defaultLat, defaultLon), 900000);
-                    },
-                    { timeout: 10000 }
-                );
+                const toastHtml = `
+                    <div id="geo-toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] bg-white rounded-xl shadow-2xl border-l-4 border-agro-primary p-4 max-w-md w-[90%] flex items-start gap-3 animate-fade-in-up">
+                        <i class="fa-solid fa-location-dot text-agro-primary text-xl mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-agro-dark">Permiso de Ubicación</h4>
+                            <p class="text-sm text-gray-600 mt-1">AgroConsulta necesita tu ubicación para ofrecerte datos precisos del clima y mostrarte las tiendas agrícolas más cercanas a ti. <br><strong class="text-agro-primary">¡Por favor, dale a "Permitir" en la ventanita!</strong></p>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', toastHtml);
+
+                setTimeout(() => {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const t = document.getElementById('geo-toast'); if (t) t.remove();
+                            // Éxito: El usuario dio permiso
+                            const userLat = position.coords.latitude;
+                            const userLon = position.coords.longitude;
+                            
+                            fetchCityName(userLat, userLon);
+                            fetchWeather(userLat, userLon);
+                            
+                            // Actualizar cada 15 mins con las coordenadas del usuario
+                            setInterval(() => fetchWeather(userLat, userLon), 900000);
+                        },
+                        (error) => {
+                            const t = document.getElementById('geo-toast'); if (t) t.remove();
+                            // Error o denegado: Usar por defecto
+                            console.warn("Geolocalización denegada o fallida, usando Tarapoto por defecto.", error);
+                            document.getElementById('clima-ubicacion').innerHTML = `<i class="fa-solid fa-location-dot"></i> Tarapoto, San Martín (Por defecto)`;
+                            fetchWeather(defaultLat, defaultLon);
+                            setInterval(() => fetchWeather(defaultLat, defaultLon), 900000);
+                        },
+                        { timeout: 10000 }
+                    );
+                }, 300);
             } else {
                 // Navegador no soporta geolocalización
                 document.getElementById('clima-ubicacion').innerHTML = `<i class="fa-solid fa-location-dot"></i> Tarapoto, San Martín (Por defecto)`;

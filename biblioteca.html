@@ -952,53 +952,68 @@
             renderInsumos();
             
             if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    async (position) => {
-                        try {
-                            const lat = position.coords.latitude;
-                            const lon = position.coords.longitude;
-                            const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=es`);
-                            const data = await response.json();
-                            
-                            let locationName = null;
-                            if (data.city && data.principalSubdivision) {
-                                locationName = `${data.city}, ${data.principalSubdivision}`;
-                            } else if (data.locality && data.principalSubdivision) {
-                                locationName = `${data.locality}, ${data.principalSubdivision}`;
-                            }
-                            
-                            if (locationName) {
-                                const select = document.getElementById('location-select');
-                                // Verificar si la opción existe
-                                let optionExists = false;
-                                for (let i = 0; i < select.options.length; i++) {
-                                    if (select.options[i].value === locationName) {
-                                        optionExists = true;
-                                        break;
+                const toastHtml = `
+                    <div id="geo-toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] bg-white rounded-xl shadow-2xl border-l-4 border-agro-primary p-4 max-w-md w-[90%] flex items-start gap-3 animate-fade-in-up">
+                        <i class="fa-solid fa-location-dot text-agro-primary text-xl mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-agro-dark">Permiso de Ubicación</h4>
+                            <p class="text-sm text-gray-600 mt-1">AgroConsulta necesita tu ubicación para ofrecerte datos precisos del clima y mostrarte las tiendas agrícolas más cercanas a ti. <br><strong class="text-agro-primary">¡Por favor, dale a "Permitir" en la ventanita!</strong></p>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', toastHtml);
+
+                setTimeout(() => {
+                    navigator.geolocation.getCurrentPosition(
+                        async (position) => {
+                            const t = document.getElementById('geo-toast'); if (t) t.remove();
+                            try {
+                                const lat = position.coords.latitude;
+                                const lon = position.coords.longitude;
+                                const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=es`);
+                                const data = await response.json();
+                                
+                                let locationName = null;
+                                if (data.city && data.principalSubdivision) {
+                                    locationName = `${data.city}, ${data.principalSubdivision}`;
+                                } else if (data.locality && data.principalSubdivision) {
+                                    locationName = `${data.locality}, ${data.principalSubdivision}`;
+                                }
+                                
+                                if (locationName) {
+                                    const select = document.getElementById('location-select');
+                                    // Verificar si la opción existe
+                                    let optionExists = false;
+                                    for (let i = 0; i < select.options.length; i++) {
+                                        if (select.options[i].value === locationName) {
+                                            optionExists = true;
+                                            break;
+                                        }
                                     }
+                                    
+                                    // Si no existe, crearla
+                                    if (!optionExists) {
+                                        const newOption = new Option(locationName, locationName);
+                                        newOption.className = "text-gray-800";
+                                        select.add(newOption);
+                                    }
+                                    
+                                    select.value = locationName;
                                 }
-                                
-                                // Si no existe, crearla
-                                if (!optionExists) {
-                                    const newOption = new Option(locationName, locationName);
-                                    newOption.className = "text-gray-800";
-                                    select.add(newOption);
-                                }
-                                
-                                select.value = locationName;
+                                renderTiendas();
+                            } catch(e) {
+                                console.error("Error geocoding:", e);
+                                renderTiendas();
                             }
+                        },
+                        (error) => {
+                            const t = document.getElementById('geo-toast'); if (t) t.remove();
+                            console.warn("Geolocalización denegada, usando predeterminado.", error);
                             renderTiendas();
-                        } catch(e) {
-                            console.error("Error geocoding:", e);
-                            renderTiendas();
-                        }
-                    },
-                    (error) => {
-                        console.warn("Geolocalización denegada, usando predeterminado.", error);
-                        renderTiendas();
-                    },
-                    { timeout: 10000 }
-                );
+                        },
+                        { timeout: 10000 }
+                    );
+                }, 300);
             } else {
                 renderTiendas();
             }
