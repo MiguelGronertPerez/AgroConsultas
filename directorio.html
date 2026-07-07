@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2D5A27">
+    
+    <title>Directorio de Expertos | AgroConsulta</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        agro: {
+                            primary: '#2D5A27',
+                            secondary: '#8B9A46',
+                            accent: '#F3E9D2',
+                            light: '#F7F9F4',
+                            dark: '#1B2A18',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-nav {
+            background: rgba(17, 28, 16, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .expert-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .expert-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen font-sans bg-[#F7F9F4] text-[#1B2A18] transition-colors duration-300">
+
+    <!-- Navegación -->
+    <nav class="glass-nav sticky top-0 z-50 w-full transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-agro-primary text-white p-2.5 rounded-xl shadow-sm">
+                        <i class="fa-solid fa-leaf text-2xl"></i>
+                    </div>
+                    <a href="index.html" class="font-display font-bold text-2xl tracking-tight text-agro-dark">
+                        Agro<span class="text-agro-primary">Consulta</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="text-gray-800 hover:text-agro-primary font-semibold transition-colors">Inicio</a>
+                    <a href="consultas.html" class="text-gray-800 hover:text-agro-primary font-semibold transition-colors">Consultas</a>
+                    <a href="biblioteca.html" class="text-gray-800 hover:text-agro-primary font-semibold transition-colors">Biblioteca</a>
+                    <a href="directorio.html" class="text-agro-primary font-semibold border-b-2 border-agro-primary pb-1">Directorio</a>
+                </div>
+                
+                <!-- Botón Menú Móvil -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); const icon = this.querySelector('i'); if(icon.classList.contains('fa-bars')) { icon.classList.replace('fa-bars', 'fa-xmark'); } else { icon.classList.replace('fa-xmark', 'fa-bars'); }" class="text-gray-800 hover:text-agro-primary focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú Móvil -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg absolute w-full left-0 z-50">
+            <a href="index.html" class="block text-gray-800 hover:text-agro-primary font-semibold pl-4 py-2">Inicio</a>
+            <a href="consultas.html" class="block text-gray-800 hover:text-agro-primary font-semibold pl-4 py-2">Consultas</a>
+            <a href="biblioteca.html" class="block text-gray-800 hover:text-agro-primary font-semibold pl-4 py-2">Biblioteca</a>
+            <a href="directorio.html" class="block text-agro-primary font-semibold border-l-4 border-agro-primary pl-3 py-2 bg-green-50 rounded-r-lg">Directorio</a>
+        </div>
+    </nav>
+
+    <!-- Header Interno -->
+    <header class="relative py-24 overflow-hidden bg-agro-dark">
+        <!-- Imagen de Fondo Fotográfica -->
+        <div class="absolute inset-0 z-0">
+            <img src="img/portada.png" alt="Ingeniero Agrónomo" class="w-full h-full object-cover" style="object-position: center 40%;">
+            <div class="absolute inset-0 bg-black/50"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <h1 class="font-display text-4xl md:text-5xl font-extrabold text-white mb-4">Directorio de Expertos</h1>
+            <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">Conecta directamente con ingenieros agrónomos, técnicos y especialistas de la región de San Martín para mejorar tu producción.</p>
+            
+            <!-- Buscador y Filtros -->
+            <div class="max-w-3xl mx-auto bg-white p-2 rounded-2xl flex flex-col md:flex-row shadow-xl">
+                <div class="flex-grow flex items-center px-4 border-r border-gray-100">
+                    <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+                    <input type="text" id="buscador-expertos" placeholder="Buscar por nombre o especialidad..." class="w-full p-3 focus:outline-none text-gray-700">
+                </div>
+                <div class="flex items-center px-4 md:w-64">
+                    <i class="fa-solid fa-location-dot text-gray-400"></i>
+                    <select id="filtro-ubicacion" class="w-full p-3 focus:outline-none text-gray-700 bg-transparent cursor-pointer">
+                        <option value="todos">Todo San Martín</option>
+                        <option value="tarapoto">Tarapoto</option>
+                        <option value="moyobamba">Moyobamba</option>
+                        <option value="nueva cajamarca">Nueva Cajamarca</option>
+                        <option value="juanjui">Juanjuí</option>
+                        <option value="rioja">Rioja</option>
+                        <option value="lamas">Lamas</option>
+                        <option value="bellavista">Bellavista</option>
+                        <option value="picota">Picota</option>
+                        <option value="saposoa">Saposoa</option>
+                        <option value="tocache">Tocache</option>
+                    </select>
+                </div>
+                <button onclick="filtrarExpertos()" class="bg-agro-primary text-white font-bold px-8 py-3 rounded-xl hover:bg-agro-dark transition-colors md:mt-0 mt-2">
+                    Buscar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow py-16 px-4 max-w-7xl mx-auto w-full relative">
+        <div id="expertos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cards generadas por JS -->
+        </div>
+
+        <div id="no-results" class="hidden text-center py-16">
+            <i class="fa-solid fa-users-slash text-4xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-500">No se encontraron profesionales</h3>
+            <p class="text-gray-400">Intenta con otro término o ubicación.</p>
+        </div>
+    </main>
+
+    <!-- Modal de Calificación -->
+    <div id="modal-calificar" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
+            <button onclick="cerrarModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-agro-dark mb-2">Calificar Profesional</h3>
+            <p id="modal-prof-name" class="text-sm text-agro-secondary font-medium mb-6">Ing. Juan Perez</p>
+            
+            <div class="flex justify-center gap-2 mb-6 text-3xl text-gray-300 cursor-pointer" id="star-rating">
+                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-val="1"></i>
+                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-val="2"></i>
+                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-val="3"></i>
+                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-val="4"></i>
+                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-val="5"></i>
+            </div>
+            
+            <textarea id="modal-comentario" placeholder="Escribe un comentario sobre su servicio..." class="w-full p-3 border border-gray-200 rounded-xl mb-4 focus:ring-2 focus:ring-agro-primary outline-none resize-none h-24 text-gray-700"></textarea>
+            
+            <button onclick="enviarCalificacion()" class="w-full bg-agro-primary text-white font-bold py-3 rounded-xl hover:bg-agro-dark transition-colors">
+                Enviar Calificación
+            </button>
+        </div>
+    </div>
+
+    <footer class="bg-agro-dark text-white py-12 px-4 border-t-4 border-agro-secondary mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-leaf text-agro-secondary text-2xl"></i>
+                <span class="font-display font-bold text-2xl tracking-tight">AgroConsulta</span>
+            </div>
+            <div class="text-gray-400 text-sm">
+                &copy; 2026 AgroConsulta. Portal de acceso libre.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de Datos, Filtro y Modal -->
+    <script>
+        // Simulador de Base de Datos con LocalStorage (Reemplazable por Supabase)
+        const profesionalesDefault = [
+            { id: 1, nombre: "Ing. Daniel Ushiñahua Ramirez", especialidad: "Investigación Agraria / Agroforestería", ubi: "Tarapoto", cip: "Investigador INIA", icono: "fa-tree", disp: "Consultoría e Investigación", tel: "942694373", avatarBg: "2D5A27", rating: 0, reviews: [], link: "https://ctivitae.concytec.gob.pe/appDirectorioCTI/", fuente: "CONCYTEC / CTI Vitae" },
+            { id: 2, nombre: "Ing. Roaldo Lopez Fulca", especialidad: "Medio Ambiente y Desarrollo (UNSM)", ubi: "Tarapoto", cip: "Docente UNSM", icono: "fa-graduation-cap", disp: "Asesorías L-V 3pm-6pm", tel: "911222333", avatarBg: "8B9A46", rating: 0, reviews: [], link: "https://ctivitae.concytec.gob.pe/appDirectorioCTI/", fuente: "CONCYTEC / CTI Vitae" },
+            { id: 3, nombre: "Ing. Edson Esmith Torres Chavez", especialidad: "Fitomejoramiento y Semillas (INIA)", ubi: "Moyobamba", cip: "Investigador Agrario", icono: "fa-seedling", disp: "Proyectos Sostenibles", tel: "988777666", avatarBg: "2D5A27", rating: 0, reviews: [], link: "https://ctivitae.concytec.gob.pe/appDirectorioCTI/", fuente: "CONCYTEC / CTI Vitae" },
+            { id: 4, nombre: "Ing. Mariano Chavez Bazan", especialidad: "Agroecología y Viveros", ubi: "Tarapoto", cip: "Msc. Agroecología", icono: "fa-leaf", disp: "Muestreos en campo", tel: "955444333", avatarBg: "8B9A46", rating: 0, reviews: [], link: "https://ctivitae.concytec.gob.pe/appDirectorioCTI/", fuente: "CONCYTEC / CTI Vitae" },
+            { id: 5, nombre: "Ing. Elías Torres Flores", especialidad: "Investigador RENACYT Agrario", ubi: "Juanjuí", cip: "RENACYT-31", icono: "fa-microscope", disp: "Todos los días", tel: "977666555", avatarBg: "D97706", rating: 0, reviews: [], link: "https://ctivitae.concytec.gob.pe/appDirectorioCTI/", fuente: "CONCYTEC / CTI Vitae" },
+            { id: 6, nombre: "Ing. Orly Denisse Calle Roalcaba", especialidad: "Agricultura Sostenible (Café/Cacao)", ubi: "Moyobamba", cip: "Especialista Cacao", icono: "fa-mug-hot", disp: "L-S 8am-5pm", tel: "933444555", avatarBg: "3B82F6", rating: 0, reviews: [], link: "https://ctivitae.concytec.gob.pe/appDirectorioCTI/", fuente: "CONCYTEC / CTI Vitae" },
+            { id: 7, nombre: "Ing. Carlos Fernando Sanchez Laurel", especialidad: "Transferencia Tecnológica Amazónica", ubi: "Tocache", cip: "Consultor Agrícola", icono: "fa-droplet", disp: "Auditorías de campo", tel: "912912912", avatarBg: "2D5A27", rating: 0, reviews: [], link: "https://ctivitae.concytec.gob.pe/appDirectorioCTI/", fuente: "CONCYTEC / CTI Vitae" },
+            { id: 8, nombre: "Ing. Decny Omar Chinchay Rubio", especialidad: "Manejo de Cultivos y Microorganismos", ubi: "Rioja", cip: "Asesor Técnico", icono: "fa-bug-slash", disp: "Planes de Abonamiento", tel: "999000111", avatarBg: "8B9A46", rating: 0, reviews: [], link: "https://ctivitae.concytec.gob.pe/appDirectorioCTI/", fuente: "CONCYTEC / CTI Vitae" }
+        ];
+
+        // Cargar desde localStorage o usar default (cambiando la llave para forzar actualización)
+        let profesionales = JSON.parse(localStorage.getItem('agroconsulta_profesionales_v2'));
+        if (!profesionales) {
+            profesionales = profesionalesDefault;
+            localStorage.setItem('agroconsulta_profesionales_v2', JSON.stringify(profesionales));
+        }
+
+        const grid = document.getElementById('expertos-grid');
+        const buscador = document.getElementById('buscador-expertos');
+        const select = document.getElementById('filtro-ubicacion');
+        const noResults = document.getElementById('no-results');
+
+        function renderStars(rating) {
+            let stars = '';
+            for(let i=1; i<=5; i++) {
+                if(i <= Math.floor(rating)) stars += '<i class="fa-solid fa-star"></i>';
+                else if (i === Math.ceil(rating) && !Number.isInteger(rating)) stars += '<i class="fa-solid fa-star-half-stroke"></i>';
+                else stars += '<i class="fa-regular fa-star"></i>';
+            }
+            return stars;
+        }
+
+        function renderProfesionales(lista) {
+            grid.innerHTML = "";
+            if (lista.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+
+            lista.forEach(prof => {
+                const nombreLimpio = prof.nombre.replace("Ing. ", "").replace("Téc. ", "").replace(/ /g, "+");
+                const numReviews = prof.reviews ? prof.reviews.length : 0;
+                
+                // HTML para las reseñas
+                let reviewsHtml = '';
+                if (numReviews > 0) {
+                    const lastReview = prof.reviews[prof.reviews.length - 1];
+                    reviewsHtml = `
+                    <div class="mt-4 p-3 bg-gray-50 rounded-xl text-sm italic text-gray-600 border-l-2 border-amber-400">
+                        "${lastReview.text}"
+                    </div>`;
+                } else {
+                    reviewsHtml = `
+                    <div class="mt-4 p-3 bg-gray-50 rounded-xl text-xs text-gray-400 text-center">
+                        Sin reseñas aún. ¡Sé el primero en calificar!
+                    </div>`;
+                }
+
+                grid.innerHTML += `
+                <div class="bg-white rounded-3xl p-8 border border-gray-100 expert-card relative overflow-hidden group flex flex-col h-full">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-green-50 to-transparent rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-500"></div>
+                    
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex items-start gap-4">
+                            <img src="https://ui-avatars.com/api/?name=${nombreLimpio}&background=${prof.avatarBg}&color=fff&size=80" alt="${prof.nombre}" class="w-20 h-20 rounded-2xl object-cover shadow-sm">
+                            <div>
+                                <div class="flex items-center gap-1 text-amber-400 text-xs mb-1">
+                                    ${renderStars(prof.rating)} <span class="text-gray-400 ml-1">(${prof.rating.toFixed(1)}) • ${numReviews} reseñas</span>
+                                </div>
+                                <h2 class="font-bold text-lg text-agro-dark leading-tight">${prof.nombre}</h2>
+                                <span class="text-sm font-medium text-agro-secondary">${prof.especialidad}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6 flex-grow">
+                        <div class="flex items-center gap-3 text-sm text-gray-600">
+                            <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400"><i class="fa-solid fa-location-dot"></i></div>
+                            <span>${prof.ubi}, San Martín</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-600">
+                            <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400"><i class="fa-solid ${prof.icono}"></i></div>
+                            <span class="flex-grow">Registro: <b>${prof.cip}</b></span>
+                            <a href="${prof.link}" target="_blank" class="text-xs text-blue-600 hover:underline flex items-center gap-1 bg-blue-50 px-2 py-1 rounded" title="Verificar profesional en el portal oficial">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Verificar
+                            </a>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-600">
+                            <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400"><i class="fa-solid fa-clock"></i></div>
+                            <span>${prof.disp}</span>
+                        </div>
+                        
+                        ${reviewsHtml}
+                    </div>
+                    
+                    <div class="flex flex-col gap-2 mt-auto">
+                        <div class="flex gap-3">
+                            <a href="https://wa.me/51${prof.tel}?text=${encodeURIComponent('Hola, buen día con el ' + prof.nombre + ', ¿me podría ayudar con unos problemas en mi chacra?')}" target="_blank" class="flex-grow bg-green-500 text-white font-semibold py-2 px-4 rounded-xl text-center hover:bg-green-600 transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> Contactar
+                            </a>
+                            <button onclick="abrirModalCalificar(${prof.id})" class="bg-amber-100 text-amber-700 hover:bg-amber-200 font-semibold px-4 rounded-xl transition-colors" title="Calificar">
+                                <i class="fa-solid fa-star"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Protección de Datos y Fuente -->
+                        <div class="border-t border-gray-100 mt-2 pt-2">
+                            <div class="text-[9px] text-gray-400 text-center uppercase tracking-wide mb-1">
+                                Fuente: ${prof.fuente} — verificado el 05/07/2026
+                            </div>
+                            <button onclick="solicitarBaja('${prof.nombre}')" class="text-[10px] text-gray-400 hover:text-red-500 underline block w-full text-center transition-colors">
+                                ¿Eres tú? Solicita la baja de este perfil (Ley N° 29733)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+        }
+
+        function filtrarExpertos() {
+            const query = buscador.value.toLowerCase();
+            const ubicacionFiltro = select.value.toLowerCase();
+
+            const filtrados = profesionales.filter(prof => {
+                const coincideTexto = prof.nombre.toLowerCase().includes(query) || prof.especialidad.toLowerCase().includes(query) || prof.cip.toLowerCase().includes(query);
+                
+                const ubiLimpia = prof.ubi.toLowerCase().replace('í', 'i').replace('á', 'a');
+                let coincideUbicacion = true;
+                if (ubicacionFiltro !== 'todos') {
+                    coincideUbicacion = ubiLimpia.includes(ubicacionFiltro);
+                }
+
+                return coincideTexto && coincideUbicacion;
+            });
+            renderProfesionales(filtrados);
+        }
+
+        buscador.addEventListener('input', filtrarExpertos);
+        select.addEventListener('change', filtrarExpertos);
+
+        // Iniciar
+        renderProfesionales(profesionales);
+
+        // Lógica del Modal y Calificaciones
+        const modal = document.getElementById('modal-calificar');
+        const modalName = document.getElementById('modal-prof-name');
+        const starRating = document.getElementById('star-rating');
+        let calificacionActual = 5;
+        let expertoIdActual = null;
+
+        function abrirModalCalificar(id) {
+            const experto = profesionales.find(p => p.id === id);
+            if (!experto) return;
+            
+            expertoIdActual = id;
+            modalName.innerText = experto.nombre;
+            modal.classList.remove('hidden');
+            pintarEstrellas(5);
+            document.getElementById('modal-comentario').value = '';
+        }
+
+        function cerrarModal() {
+            modal.classList.add('hidden');
+            document.getElementById('modal-comentario').value = '';
+        }
+
+        function solicitarBaja(nombre) {
+            alert(`Solicitud de baja para: ${nombre}.\n\nPara proceder según la Ley de Protección de Datos Personales, por favor envíe un correo a admin@agroconsulta.pe con su documento de identidad y se eliminará este registro público de inmediato.`);
+        }
+
+        // Interfaz de estrellas en el modal
+        const estrellasModal = starRating.querySelectorAll('i');
+        estrellasModal.forEach(est => {
+            est.addEventListener('click', (e) => {
+                const val = parseInt(e.target.getAttribute('data-val'));
+                pintarEstrellas(val);
+            });
+        });
+
+        function pintarEstrellas(val) {
+            calificacionActual = val;
+            estrellasModal.forEach(e => {
+                const v = parseInt(e.getAttribute('data-val'));
+                if(v <= val) {
+                    e.classList.remove('text-gray-300');
+                    e.classList.add('text-amber-400');
+                } else {
+                    e.classList.add('text-gray-300');
+                    e.classList.remove('text-amber-400');
+                }
+            });
+        }
+
+        function enviarCalificacion() {
+            const comentario = document.getElementById('modal-comentario').value.trim();
+            if (!comentario) {
+                alert("Por favor escribe un comentario antes de calificar.");
+                return;
+            }
+
+            const expertoIndex = profesionales.findIndex(p => p.id === expertoIdActual);
+            if (expertoIndex !== -1) {
+                const exp = profesionales[expertoIndex];
+                
+                // Agregar review
+                if(!exp.reviews) exp.reviews = [];
+                exp.reviews.push({ stars: calificacionActual, text: comentario });
+                
+                // Recalcular rating promedio
+                const sum = exp.reviews.reduce((a, b) => a + b.stars, 0);
+                exp.rating = sum / exp.reviews.length;
+                
+                // Guardar en localStorage
+                localStorage.setItem('agroconsulta_profesionales', JSON.stringify(profesionales));
+                
+                // Renderizar de nuevo
+                filtrarExpertos();
+                
+                alert(`¡Gracias por tu calificación de ${calificacionActual} estrellas!\nSe ha guardado exitosamente.`);
+                cerrarModal();
+            }
+        }
+    </script>
+
+</body>
+</html>

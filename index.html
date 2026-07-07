@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2D5A27">
+    
+    <title>AgroConsulta - Portal de Información Agrícola</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        agro: {
+                            primary: '#2D5A27',     // Forest Green
+                            secondary: '#8B9A46',   // Olive Green
+                            accent: '#F3E9D2',      // Earthy Beige
+                            light: '#F7F9F4',       // Soft Green White
+                            dark: '#1B2A18',        // Deep Green Black
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'float': 'float 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(27,42,24,0.9) 0%, rgba(45,90,39,0.8) 100%);
+        }
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(45, 90, 39, 0.25);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen font-sans bg-[#F7F9F4] text-[#1B2A18] transition-colors duration-300">
+
+    <!-- Navegación -->
+    <nav class="glass-nav sticky top-0 z-50 w-full transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-agro-primary text-white p-2.5 rounded-xl shadow-lg">
+                        <i class="fa-solid fa-leaf text-2xl"></i>
+                    </div>
+                    <a href="index.html" class="font-display font-bold text-2xl tracking-tight text-agro-dark">
+                        Agro<span class="text-agro-primary">Consulta</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="text-agro-primary font-semibold border-b-2 border-agro-primary pb-1">Inicio</a>
+                    <a href="consultas.html" class="text-gray-800 hover:text-agro-primary font-semibold transition-colors">Consultas</a>
+                    <a href="biblioteca.html" class="text-gray-800 hover:text-agro-primary font-semibold transition-colors">Biblioteca</a>
+                    <a href="directorio.html" class="text-gray-800 hover:text-agro-primary font-semibold transition-colors">Directorio</a>
+                </div>
+                
+                <!-- Botón Menú Móvil -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); const icon = this.querySelector('i'); if(icon.classList.contains('fa-bars')) { icon.classList.replace('fa-bars', 'fa-xmark'); } else { icon.classList.replace('fa-xmark', 'fa-bars'); }" class="text-gray-800 hover:text-agro-primary focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú Móvil -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg absolute w-full left-0 z-50">
+            <a href="index.html" class="block text-agro-primary font-semibold border-l-4 border-agro-primary pl-3 py-2 bg-green-50 rounded-r-lg">Inicio</a>
+            <a href="consultas.html" class="block text-gray-800 hover:text-agro-primary font-semibold pl-4 py-2">Consultas</a>
+            <a href="biblioteca.html" class="block text-gray-800 hover:text-agro-primary font-semibold pl-4 py-2">Biblioteca</a>
+            <a href="directorio.html" class="block text-gray-800 hover:text-agro-primary font-semibold pl-4 py-2">Directorio</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="flex-grow">
+        <section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+            <!-- Background Image -->
+            <div class="absolute inset-0 z-0">
+                <img src="img/portada.png" alt="Campo agrícola" class="w-full h-full object-cover">
+                <div class="absolute inset-0 hero-gradient"></div>
+            </div>
+            
+            <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-agro-accent mb-8 animate-fade-in-up">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-agro-secondary opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-agro-secondary"></span>
+                    </span>
+                    Información actualizada 2026
+                </div>
+                
+                <h1 class="font-display text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight animate-fade-in-up" style="animation-delay: 0.1s;">
+                    El conocimiento agrícola <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-agro-secondary to-yellow-300">a tu alcance.</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto font-light leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
+                    Explora precios actualizados, descubre nuevas técnicas de cultivo y conecta con expertos de la región sin barreras ni registros.
+                </p>
+                
+                <div class="flex flex-wrap justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <a href="consultas.html" class="px-8 py-4 rounded-full bg-agro-primary text-white font-semibold text-lg hover:bg-agro-dark transition-colors shadow-xl shadow-agro-primary/30 flex items-center gap-2">
+                        Explorar Consultas <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="biblioteca.html" class="px-8 py-4 rounded-full bg-white text-agro-primary font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg flex items-center gap-2">
+                        Ver Precios <i class="fa-solid fa-tag"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Wave divider -->
+            <div class="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10">
+                <svg class="relative block w-full h-[60px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,121.22,200,106.5,241.6,97.63,281.33,76.62,321.39,56.44Z" fill="#F7F9F4"></path>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Módulo 7 Fases y Clima -->
+        <section class="py-20 px-4 bg-white relative z-20">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <span class="text-sm font-bold text-agro-secondary uppercase tracking-[0.2em] mb-2 block">Asesoría Inteligente</span>
+                    <h2 class="font-display text-4xl font-extrabold text-agro-dark mb-4">Las 7 Fases del Cultivo y el Clima</h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">Selecciona la fase actual de tu plantación de Café/Cacao para recibir recomendaciones adaptadas al clima de hoy.</p>
+                </div>
+                
+                <div class="flex flex-col lg:flex-row gap-10">
+                    <!-- Clima Actual Widget -->
+                    <div class="lg:w-1/3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 border border-blue-200 shadow-sm flex flex-col justify-center">
+                        <div id="clima-ubicacion" class="text-blue-500 font-bold uppercase text-xs tracking-wider mb-4"><i class="fa-solid fa-location-dot"></i> Detectando ubicación...</div>
+                        <div class="flex items-center gap-6 mb-6">
+                            <i id="clima-icono" class="fa-solid fa-cloud-sun-rain text-6xl text-blue-400"></i>
+                            <div>
+                                <div id="clima-temp" class="text-5xl font-display font-extrabold text-agro-dark">...</div>
+                                <div id="clima-desc" class="text-gray-600 font-medium">Cargando...</div>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-sm border-b border-blue-200 pb-2">
+                                <span class="text-gray-500">Humedad</span>
+                                <span id="clima-humedad" class="font-bold text-agro-dark">...</span>
+                            </div>
+                            <div class="flex justify-between text-sm border-b border-blue-200 pb-2">
+                                <span class="text-gray-500">Probabilidad de lluvia</span>
+                                <span id="clima-prob" class="font-bold text-agro-dark">...</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Viento</span>
+                                <span id="clima-viento" class="font-bold text-agro-dark">...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fases Interactivas -->
+                    <div class="lg:w-2/3">
+                        <!-- Selector de Cultivo y Fases -->
+                        <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
+                            <h3 class="font-bold text-agro-dark text-lg whitespace-nowrap">¿Qué cultivas?</h3>
+                            <select id="selector-cultivo" onchange="cambiarCultivo()" class="w-full sm:w-auto flex-grow p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-agro-primary outline-none text-gray-700 bg-white shadow-sm cursor-pointer font-medium">
+                                <option value="cafe">Café</option>
+                                <option value="cacao">Cacao</option>
+                                <option value="arroz">Arroz</option>
+                                <option value="palma">Palma Aceitera</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Navegación de Fases -->
+                        <div class="flex flex-wrap gap-2 mb-8" id="fases-nav">
+                            <button onclick="cambiarFase(1)" class="fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors bg-agro-primary text-white shadow-md">1. Germinación</button>
+                            <button onclick="cambiarFase(2)" class="fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors bg-gray-100 text-gray-500 hover:bg-gray-200">2. Almácigo</button>
+                            <button onclick="cambiarFase(3)" class="fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors bg-gray-100 text-gray-500 hover:bg-gray-200">3. Crecimiento</button>
+                            <button onclick="cambiarFase(4)" class="fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors bg-gray-100 text-gray-500 hover:bg-gray-200">4. Floración</button>
+                            <button onclick="cambiarFase(5)" class="fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors bg-gray-100 text-gray-500 hover:bg-gray-200">5. Llenado</button>
+                            <button onclick="cambiarFase(6)" class="fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors bg-gray-100 text-gray-500 hover:bg-gray-200">6. Maduración</button>
+                            <button onclick="cambiarFase(7)" class="fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors bg-gray-100 text-gray-500 hover:bg-gray-200">7. Poda</button>
+                        </div>
+
+                        <!-- Contenido Dinámico de la Fase (Mini-Clase) -->
+                        <div id="fase-contenido" class="bg-white rounded-3xl p-8 border border-gray-100 min-h-[300px] relative overflow-hidden shadow-lg transition-all duration-300">
+                            <!-- Decoración -->
+                            <i class="fa-solid fa-seedling absolute -bottom-10 -right-10 text-9xl text-green-500/5 rotate-12"></i>
+                            
+                            <div class="flex items-center gap-3 mb-4 relative z-10">
+                                <span class="bg-amber-100 text-amber-700 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider">Mini-Clase</span>
+                                <h3 id="fase-titulo" class="font-display text-2xl font-bold text-agro-dark">Fase 1: Germinación y Semilla</h3>
+                            </div>
+                            
+                            <p id="fase-desc" class="text-gray-600 mb-6 relative z-10 leading-relaxed text-lg">En esta etapa inicial, la semilla requiere humedad constante pero sin encharcamientos para despertar el embrión y brotar exitosamente.</p>
+                            
+                            <!-- Cómo Identificarlo -->
+                            <div class="bg-green-50 rounded-2xl p-5 border border-green-100 relative z-10 mb-6">
+                                <h4 class="font-bold text-agro-primary mb-3 flex items-center gap-2"><i class="fa-solid fa-eye"></i> ¿Cómo identificarlo en el campo?</h4>
+                                <ul id="fase-identificar" class="list-disc list-inside space-y-2 text-sm text-green-800">
+                                    <li>Las semillas están recién sembradas en camas o bolsas.</li>
+                                    <li>Aún no hay hojas visibles.</li>
+                                    <li>Solo se observa la ruptura de la cáscara y asoma una pequeña raicilla blanca.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100 relative z-10 flex items-start gap-4">
+                                <div class="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-cloud-rain"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm mb-1">Impacto del Clima Actual (Lluvias ligeras)</h4>
+                                    <p id="fase-tip" class="text-sm text-gray-600">Las lluvias actuales son beneficiosas. Mantén los germinadores bajo sombra parcial. Si la lluvia arrecia, asegúrate de tener cobertores plásticos listos.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            // Base de datos didáctica de fases por cultivo
+            const datosFasesCultivos = {
+                cafe: {
+                    1: { btn: "1. Semilla", title: "Fase 1: Germinación (Fósforo)", desc: "Despertar de la semilla de café. Requiere mucha humedad pero estricto control de temperatura.", iden: ["Semilla sembrada en cama de arena.", "Aún no asoma el 'fosforito'.", "Mucha dependencia del riego fino."], tip: "Lluvia ligera ayuda, pero cuidado con el exceso que pudre la semilla.", icon: "fa-seedling" },
+                    2: { btn: "2. Chapola", title: "Fase 2: Chapola", desc: "La planta levanta la cabeza y abre sus primeros cotiledones (hojas falsas).", iden: ["Se levanta del suelo como un 'soldadito'.", "Abre dos hojitas redondeadas en la punta.", "Momento ideal para repique a bolsa."], tip: "Vigila la humedad. 78% es alto y favorece al hongo 'chupadera'. Aplica fungicida preventivo.", icon: "fa-leaf" },
+                    3: { btn: "3. Almácigo", title: "Fase 3: Almácigo (Crecimiento)", desc: "En bolsas en vivero. Desarrollo de raíces y pares de hojas verdaderas.", iden: ["Tiene de 2 a 6 pares de hojas reales.", "Raíz pivotante bien formada.", "Tallo empieza a engrosar."], tip: "La lluvia actual limpia las hojas, pero asegúrate de que las bolsas tengan buen drenaje.", icon: "fa-plant-wilt" },
+                    4: { btn: "4. Botón", title: "Fase 4: Botón Floral", desc: "La planta en campo se prepara para florear tras un estrés hídrico.", iden: ["Aparecen pequeñas yemas blanquecinas en las axilas de las ramas.", "Aún no se abre la flor."], tip: "Las lluvias son perfectas para 'reventar' la floración de forma uniforme.", icon: "fa-fan" },
+                    5: { btn: "5. Floración", title: "Fase 5: Floración", desc: "Apertura total de las flores blancas. Etapa crítica para el cuajado del fruto.", iden: ["Huele a jazmín en el cafetal.", "Flores completamente abiertas y blancas.", "Presencia de abejas y polinizadores."], tip: "Lluvia ligera está bien, pero lluvia fuerte tumba la flor antes de polinizarse.", icon: "fa-sun" },
+                    6: { btn: "6. Llenado", title: "Fase 6: Llenado de Grano", desc: "El grano verde crece hasta su tamaño máximo y comienza a endurecerse.", iden: ["Granos verdes y duros como perdigones.", "Racimos densos en las ramas.", "Aumento rápido de peso."], tip: "Riesgo de Broca alto. El clima húmedo beneficia la reproducción de esta plaga.", icon: "fa-droplet" },
+                    7: { btn: "7. Maduración", title: "Fase 7: Maduración y Cosecha", desc: "Cambio de color y concentración de azúcares. Listo para recolección.", iden: ["El grano pasa a color rojo intenso o amarillo.", "Al apretarlo, sale suavemente de la cáscara.", "Sabor dulce en el mucílago."], tip: "No dejes sobremadurar con este clima, las lluvias pueden hacer que el grano caiga al suelo.", icon: "fa-basket-shopping" }
+                },
+                cacao: {
+                    1: { btn: "1. Vivero", title: "Fase 1: Vivero e Injerto", desc: "Crecimiento del patrón y unión del clon para asegurar buena genética.", iden: ["Plantón en bolsa negra.", "Cinta plástica amarrando el injerto.", "Hojas jóvenes de color rojizo o verde claro."], tip: "Evita el encharcamiento en las bolsas por las lluvias actuales.", icon: "fa-seedling" },
+                    2: { btn: "2. Desarrollo", title: "Fase 2: Desarrollo Vegetativo", desc: "Plantación joven en campo formando su estructura (horqueta).", iden: ["Planta sin frutos.", "Formación de 3 a 4 ramas principales (horqueta).", "Alta emisión de hojas nuevas."], tip: "Aprovecha la humedad del suelo para fertilizar con Nitrógeno.", icon: "fa-tree" },
+                    3: { btn: "3. Floración", title: "Fase 3: Floración en Cojinetes", desc: "Emisión de flores pequeñas en el tronco principal y ramas gruesas.", iden: ["Pequeñas flores blancas o rosadas pegadas al tronco.", "Presencia de mosquitas polinizadoras (Forcipomyia)."], tip: "Las lluvias excesivas pueden lavar el polen. Mantén buen drenaje.", icon: "fa-fan" },
+                    4: { btn: "4. Chilillo", title: "Fase 4: Chilillo", desc: "Frutos recién formados, muy pequeños y vulnerables.", iden: ["Miden entre 1 y 4 cm.", "Color verde o rojo oscuro según la variedad.", "Se caen fácilmente al tocarlos."], tip: "Cuidado con la humedad alta; favorece la Phytophthora (Pudrición parda) en frutos tiernos.", icon: "fa-droplet" },
+                    5: { btn: "5. Crecimiento", title: "Fase 5: Crecimiento de Mazorca", desc: "El fruto aumenta de tamaño y demanda mucha energía y nutrientes.", iden: ["Mazorcas grandes pero inmaduras.", "Cáscara dura.", "Semillas aún blandas por dentro."], tip: "Momento crítico para Moniliasis. Revisa y retira mazorcas con manchas blancas.", icon: "fa-lemon" },
+                    6: { btn: "6. Maduración", title: "Fase 6: Maduración", desc: "Las mazorcas cambian de color indicando que el mucílago es dulce.", iden: ["Las verdes se tornan amarillas.", "Las rojas se tornan anaranjadas.", "Al golpear con el dedo, suena hueco."], tip: "Cosecha oportuna. La lluvia puede podrir la mazorca madura en el árbol.", icon: "fa-basket-shopping" },
+                    7: { btn: "7. Poda", title: "Fase 7: Poda de Mantenimiento", desc: "Corte de ramas secas, chupones y control de altura para dar luz.", iden: ["Presencia de chupones rectos en el tronco.", "Sombra excesiva dentro del cultivo.", "Ramas enfermas o cruzadas."], tip: "La lluvia leve ayuda a recuperar cortes, pero desinfecta siempre las tijeras.", icon: "fa-scissors" }
+                },
+                arroz: {
+                    1: { btn: "1. Siembra", title: "Fase 1: Siembra / Almácigo", desc: "Siembra directa o en pozas pre-germinadas.", iden: ["Terreno fangoso y nivelado.", "Semillas esparcidas en la superficie.", "Pequeños brotes verdes asomando del agua."], tip: "Las lluvias benefician manteniendo la lámina de agua necesaria.", icon: "fa-water" },
+                    2: { btn: "2. Macollamiento", title: "Fase 2: Macollamiento", desc: "La planta empieza a generar múltiples tallos desde la base (hijos).", iden: ["De un solo tallo nacen varios laterales.", "El campo se ve denso y verde oscuro.", "Ocurre a los 20-40 días después de siembra."], tip: "Aplica fertilizante rico en Nitrógeno antes de que llueva fuerte para que se incorpore.", icon: "fa-seedling" },
+                    3: { btn: "3. Diferenciación", title: "Fase 3: Diferenciación Panicular", desc: "Inicio de la formación de la espiga dentro del tallo. Fase invisible desde fuera pero vital.", iden: ["Tallo principal se empieza a ver redondo y abultado (embuchamiento).", "La planta detiene la creación de hijos."], tip: "No dejes secar el campo. La falta de agua aquí reduce drásticamente tu cosecha.", icon: "fa-arrow-up-right-dots" },
+                    4: { btn: "4. Espigamiento", title: "Fase 4: Espigamiento", desc: "La panícula (espiga) sale finalmente de la vaina de la hoja.", iden: ["Las espigas emergen por encima de las hojas.", "Color verde claro brillante.", "Ocurre rápidamente en pocos días."], tip: "Las lluvias fuertes pueden dificultar la salida uniforme de las espigas.", icon: "fa-fan" },
+                    5: { btn: "5. Floración", title: "Fase 5: Floración", desc: "Apertura de espiguillas para la polinización (que es muy rápida).", iden: ["Pequeñas anteras amarillas o blancas en las espigas.", "Suele ocurrir a media mañana."], tip: "Vientos de 12km/h son ideales para polinizar, pero lluvias en la mañana pueden lavar el polen.", icon: "fa-sun" },
+                    6: { btn: "6. Grano Lechoso", title: "Fase 6: Grano Lechoso a Pastoso", desc: "El grano se llena de un líquido blanco que luego se endurece.", iden: ["Espigas verdes y pesadas, doblándose un poco.", "Si aplastas un grano, sale un líquido blanco (leche)."], tip: "Controla plagas chupadoras como la chinche. Usa insecticidas sistémicos si la lluvia lo permite.", icon: "fa-droplet" },
+                    7: { btn: "7. Maduración", title: "Fase 7: Maduración y Cosecha", desc: "El grano se endurece, pierde humedad y la planta se torna amarilla.", iden: ["El 80% del campo se ve dorado/amarillo.", "Los granos están duros al morderlos.", "Se drena el campo para la maquinaria."], tip: "Con 60% de probabilidad de lluvia, acelera la cosecha o el grano perderá calidad comercial.", icon: "fa-tractor" }
+                },
+                palma: {
+                    1: { btn: "1. Vivero", title: "Fase 1: Pre-vivero y Vivero", desc: "Crecimiento desde semilla pregerminada hasta palmera joven lista para campo.", iden: ["Bolsas ordenadas bajo riego.", "Hojas enteras (lanceoladas) al inicio, luego empiezan a separarse (pinnadas)."], tip: "Mantén buen drenaje; las lluvias diarias pudren las raíces en bolsas.", icon: "fa-seedling" },
+                    2: { btn: "2. Juvenil", title: "Fase 2: Palma Juvenil", desc: "Primeros 2 a 3 años en campo definitivo. Desarrollo de corona grande.", iden: ["Palmera en el suelo pero sin tronco visible aún.", "Formación rápida de hojas muy grandes y verdes."], tip: "Humedad alta es perfecta para que la palma joven expanda sus hojas.", icon: "fa-tree" },
+                    3: { btn: "3. Inflorescencia", title: "Fase 3: Emisión de Inflorescencia", desc: "Aparición de flores masculinas y femeninas en la base de las hojas.", iden: ["Bultos espinosos en las axilas de las ramas.", "Olor anisado característico (atrae gorgojos polinizadores)."], tip: "Las lluvias pueden ahuyentar a los insectos polinizadores (Elaeidobius). Revisa la visita de insectos.", icon: "fa-fan" },
+                    4: { btn: "4. Formación", title: "Fase 4: Formación del Racimo", desc: "Las flores femeninas polinizadas empiezan a formar frutos individuales pequeños.", iden: ["Racimos pequeños y muy espinosos.", "Frutitos de color púrpura oscuro o negro incrustados.", "Textura dura."], tip: "Alta demanda de Potasio. Aprovecha el suelo húmedo para abonar en el plato de la palma.", icon: "fa-droplet" },
+                    5: { btn: "5. Llenado", title: "Fase 5: Llenado de Aceite", desc: "Acumulación de lípidos (aceite) dentro del mesocarpio del fruto.", iden: ["Racimos ganando gran tamaño y peso.", "Color pasando de negro/violeta a anaranjado en la base."], tip: "Lluvias normales benefician la producción de aceite pesado.", icon: "fa-flask" },
+                    6: { btn: "6. Maduración", title: "Fase 6: Maduración (Cosecha)", desc: "Momento óptimo de contenido de aceite y desprendimiento natural.", iden: ["Racimo de color rojo/anaranjado brillante.", "Caída de 1 a 2 frutos sueltos al suelo de forma natural.", "Al cortar, la pulpa es grasosa y amarilla."], tip: "Cosecha urgente para que los frutos caídos no se pudran con el barro de la lluvia.", icon: "fa-basket-shopping" },
+                    7: { btn: "7. Mantenimiento", title: "Fase 7: Mantenimiento del Anillo", desc: "Eliminación de hojas secas, corte de maleza y fertilización profunda.", iden: ["Hojas inferiores caídas o secas.", "Acumulación de helechos en el tronco.", "Maleza creciendo en el círculo (plato)."], tip: "Corta la maleza manualmente, la humedad favorecerá su rápida reaparición si solo usas herbicida foliar.", icon: "fa-scissors" }
+                }
+            };
+
+            let cultivoActual = 'cafe';
+            let faseActual = 1;
+
+            function cambiarCultivo() {
+                cultivoActual = document.getElementById('selector-cultivo').value;
+                const datosCultivo = datosFasesCultivos[cultivoActual];
+
+                // Actualizar textos de los botones
+                const nav = document.getElementById('fases-nav');
+                nav.innerHTML = '';
+                for(let i = 1; i <= 7; i++) {
+                    nav.innerHTML += `<button onclick="cambiarFase(${i})" id="btn-fase-${i}" class="fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors ${i === 1 ? 'bg-agro-primary text-white shadow-md' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}">${datosCultivo[i].btn}</button>`;
+                }
+
+                cambiarFase(1);
+            }
+
+            function cambiarFase(num) {
+                faseActual = num;
+                const datosCultivo = datosFasesCultivos[cultivoActual];
+                
+                // Actualizar botones
+                document.querySelectorAll('.fase-btn').forEach((btn, index) => {
+                    if (index + 1 === num) {
+                        btn.className = "fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors bg-agro-primary text-white shadow-md";
+                    } else {
+                        btn.className = "fase-btn flex-grow md:flex-grow-0 px-4 py-3 rounded-xl font-bold text-sm transition-colors bg-gray-100 text-gray-500 hover:bg-gray-200";
+                    }
+                });
+
+                // Actualizar contenido con animación
+                const contenido = document.getElementById('fase-contenido');
+                contenido.style.opacity = 0;
+                
+                setTimeout(() => {
+                    document.getElementById('fase-titulo').innerText = datosCultivo[num].title;
+                    document.getElementById('fase-desc').innerText = datosCultivo[num].desc;
+                    document.getElementById('fase-tip').innerText = datosCultivo[num].tip;
+                    
+                    // Actualizar lista de viñetas
+                    const ulIden = document.getElementById('fase-identificar');
+                    ulIden.innerHTML = '';
+                    datosCultivo[num].iden.forEach(item => {
+                        ulIden.innerHTML += `<li>${item}</li>`;
+                    });
+                    
+                    // Cambiar icono
+                    const iconEl = contenido.querySelector('i');
+                    iconEl.className = `fa-solid ${datosCultivo[num].icon} absolute -bottom-10 -right-10 text-9xl text-green-500/5 rotate-12 transition-all`;
+                    
+                    contenido.style.opacity = 1;
+                }, 150);
+            }
+
+            // Iniciar por defecto
+            window.onload = () => {
+                cambiarCultivo();
+            };
+        </script>
+
+        <!-- Módulos Section -->
+        <section class="py-24 px-4 bg-agro-light">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="font-display text-4xl font-extrabold text-agro-dark mb-4">Todo lo que necesitas en un solo lugar</h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">Información verificada, libre y estructurada para mejorar el rendimiento de tus cultivos.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <!-- Consultas -->
+                    <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl card-hover relative group">
+                        <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-agro-dark mb-3">Consultas Rápidas</h3>
+                        <p class="text-gray-600 mb-6">Encuentra información validada de Senasa sobre plagas, normativas y manuales agrícolas.</p>
+                        <a href="consultas.html" class="inline-flex items-center gap-2 text-blue-500 font-bold hover:text-blue-600">Probar Buscador <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+
+                    <!-- Biblioteca -->
+                    <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl card-hover relative group">
+                        <div class="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center text-agro-primary text-3xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-agro-dark mb-3">Biblioteca Pro</h3>
+                        <p class="text-gray-600 mb-6">Herramientas financieras, base de datos de insumos en vivo y calculadoras de fertilización.</p>
+                        <a href="biblioteca.html" class="inline-flex items-center gap-2 text-agro-primary font-bold hover:text-agro-dark">Abrir Biblioteca <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+
+                    <!-- Directorio -->
+                    <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl hover:shadow-2xl card-hover relative group">
+                        <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 text-3xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-address-book"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-agro-dark mb-3">Directorio Expertos</h3>
+                        <p class="text-gray-600 mb-6">Contacta con ingenieros y técnicos certificados. Lee reseñas y solicita asesoría hoy mismo.</p>
+                        <a href="directorio.html" class="inline-flex items-center gap-2 text-amber-500 font-bold hover:text-amber-600">Ver Expertos <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-agro-dark text-white py-12 px-4 border-t-4 border-agro-secondary mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-leaf text-agro-secondary text-2xl"></i>
+                <span class="font-display font-bold text-2xl tracking-tight">AgroConsulta</span>
+            </div>
+            <div class="text-gray-400 text-sm">
+                &copy; 2026 AgroConsulta. Portal de acceso libre.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sincronización de Clima en Tiempo Real (Open-Meteo) con Geolocalización
+        async function fetchWeather(lat, lon) {
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation_probability,wind_speed_10m,weather_code&timezone=auto`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if(data && data.current) {
+                    const current = data.current;
+                    document.getElementById('clima-temp').innerText = Math.round(current.temperature_2m) + '°C';
+                    document.getElementById('clima-humedad').innerText = current.relative_humidity_2m + '%';
+                    document.getElementById('clima-prob').innerText = (current.precipitation_probability || 0) + '%';
+                    document.getElementById('clima-viento').innerText = current.wind_speed_10m + ' km/h';
+                    
+                    // Mapeo básico de códigos WMO
+                    const wmoCodes = {
+                        0: { desc: 'Despejado', icon: 'fa-sun', color: 'text-amber-400' },
+                        1: { desc: 'Mayormente despejado', icon: 'fa-sun', color: 'text-amber-400' },
+                        2: { desc: 'Parcialmente nublado', icon: 'fa-cloud-sun', color: 'text-gray-400' },
+                        3: { desc: 'Nublado', icon: 'fa-cloud', color: 'text-gray-500' },
+                        45: { desc: 'Niebla', icon: 'fa-smog', color: 'text-gray-400' },
+                        48: { desc: 'Niebla escarcha', icon: 'fa-smog', color: 'text-gray-400' },
+                        51: { desc: 'Llovizna ligera', icon: 'fa-cloud-rain', color: 'text-blue-300' },
+                        53: { desc: 'Llovizna moderada', icon: 'fa-cloud-rain', color: 'text-blue-400' },
+                        55: { desc: 'Llovizna densa', icon: 'fa-cloud-rain', color: 'text-blue-500' },
+                        61: { desc: 'Lluvia leve', icon: 'fa-cloud-sun-rain', color: 'text-blue-400' },
+                        63: { desc: 'Lluvia moderada', icon: 'fa-cloud-showers-heavy', color: 'text-blue-500' },
+                        65: { desc: 'Lluvia fuerte', icon: 'fa-cloud-showers-heavy', color: 'text-blue-600' },
+                        80: { desc: 'Chubascos leves', icon: 'fa-cloud-sun-rain', color: 'text-blue-400' },
+                        81: { desc: 'Chubascos moderados', icon: 'fa-cloud-showers-heavy', color: 'text-blue-500' },
+                        82: { desc: 'Chubascos violentos', icon: 'fa-cloud-showers-heavy', color: 'text-blue-600' },
+                        95: { desc: 'Tormenta', icon: 'fa-cloud-bolt', color: 'text-purple-500' },
+                        96: { desc: 'Tormenta granizo', icon: 'fa-cloud-bolt', color: 'text-purple-600' },
+                        99: { desc: 'Tormenta granizo', icon: 'fa-cloud-bolt', color: 'text-purple-600' }
+                    };
+                    
+                    const condition = wmoCodes[current.weather_code] || { desc: 'Desconocido', icon: 'fa-cloud', color: 'text-gray-400' };
+                    document.getElementById('clima-desc').innerText = condition.desc;
+                    document.getElementById('clima-icono').className = `fa-solid ${condition.icon} text-6xl ${condition.color} transition-colors duration-500`;
+                }
+            } catch (error) {
+                console.error('Error fetching weather:', error);
+            }
+        }
+
+        async function fetchCityName(lat, lon) {
+            try {
+                // Usando BigDataCloud API gratuita para geocodificación inversa sin apiKey
+                const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=es`);
+                const data = await response.json();
+                
+                let locationName = "Ubicación desconocida";
+                if (data.city && data.principalSubdivision) {
+                    locationName = `${data.city}, ${data.principalSubdivision}`;
+                } else if (data.locality && data.principalSubdivision) {
+                    locationName = `${data.locality}, ${data.principalSubdivision}`;
+                } else if (data.principalSubdivision) {
+                    locationName = data.principalSubdivision;
+                }
+                
+                document.getElementById('clima-ubicacion').innerHTML = `<i class="fa-solid fa-location-dot"></i> ${locationName}`;
+            } catch (error) {
+                console.error('Error fetching city name:', error);
+                document.getElementById('clima-ubicacion').innerHTML = `<i class="fa-solid fa-location-dot"></i> San Martín, Perú (Aprox)`;
+            }
+        }
+        
+        function inicializarClima() {
+            // Valores por defecto (Tarapoto) si falla o deniega el permiso
+            const defaultLat = -6.48;
+            const defaultLon = -76.37;
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // Éxito: El usuario dio permiso
+                        const userLat = position.coords.latitude;
+                        const userLon = position.coords.longitude;
+                        
+                        fetchCityName(userLat, userLon);
+                        fetchWeather(userLat, userLon);
+                        
+                        // Actualizar cada 15 mins con las coordenadas del usuario
+                        setInterval(() => fetchWeather(userLat, userLon), 900000);
+                    },
+                    (error) => {
+                        // Error o denegado: Usar por defecto
+                        console.warn("Geolocalización denegada o fallida, usando Tarapoto por defecto.", error);
+                        document.getElementById('clima-ubicacion').innerHTML = `<i class="fa-solid fa-location-dot"></i> Tarapoto, San Martín (Por defecto)`;
+                        fetchWeather(defaultLat, defaultLon);
+                        setInterval(() => fetchWeather(defaultLat, defaultLon), 900000);
+                    },
+                    { timeout: 10000 }
+                );
+            } else {
+                // Navegador no soporta geolocalización
+                document.getElementById('clima-ubicacion').innerHTML = `<i class="fa-solid fa-location-dot"></i> Tarapoto, San Martín (Por defecto)`;
+                fetchWeather(defaultLat, defaultLon);
+                setInterval(() => fetchWeather(defaultLat, defaultLon), 900000);
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", inicializarClima);
+    </script>
+</body>
+</html>
